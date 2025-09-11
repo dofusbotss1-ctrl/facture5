@@ -47,12 +47,13 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    // padding-top pour compenser le header FIXE
+    <div className="min-h-screen bg-white relative overflow-hidden pt-16">
       {/* Blobs décoratifs */}
       <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-br from-teal-300/30 to-blue-300/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-gradient-to-tr from-amber-300/30 to-red-300/30 blur-3xl" />
 
-      {/* Announcement bar */}
+      {/* Announcement bar (non fixe) */}
       <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
           <p className="text-sm sm:text-base font-semibold">
@@ -64,8 +65,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-40">
+      {/* Header FIXE */}
+      <header className="fixed top-0 inset-x-0 z-50 bg-white/85 backdrop-blur-md shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
@@ -79,12 +80,12 @@ export default function HomePage() {
             </div>
 
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#accueil" className="text-gray-700 hover:text-teal-600 font-medium">Accueil</a>
-              <a href="#secteurs" className="text-gray-700 hover:text-teal-600 font-medium">Secteurs</a>
-              <a href="#modules" className="text-gray-700 hover:text-teal-600 font-medium">Modules</a>
-              <a href="#tarifs" className="text-gray-700 hover:text-teal-600 font-medium">Tarifs</a>
-              <a href="#faq" className="text-gray-700 hover:text-teal-600 font-medium">FAQ</a>
-              <Link to="/login" className="text-gray-700 hover:text-teal-600 font-medium">Connexion</Link>
+              <a href="#accueil" className="text-gray-800 hover:text-teal-600 font-medium">Accueil</a>
+              <a href="#secteurs" className="text-gray-800 hover:text-teal-600 font-medium">Secteurs</a>
+              <a href="#modules" className="text-gray-800 hover:text-teal-600 font-medium">Modules</a>
+              <a href="#tarifs" className="text-gray-800 hover:text-teal-600 font-medium">Tarifs</a>
+              <a href="#faq" className="text-gray-800 hover:text-teal-600 font-medium">FAQ</a>
+              <Link to="/login" className="text-gray-800 hover:text-teal-600 font-medium">Connexion</Link>
             </nav>
 
             <Link
@@ -97,7 +98,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero (NOUVEAU TEXTE) */}
       <section id="accueil" className="bg-gradient-to-br from-teal-50 to-blue-50 py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div variants={staggerParent} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
@@ -111,24 +112,25 @@ export default function HomePage() {
             </motion.div>
 
             <motion.h1 variants={fadeUp} className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-              <span>Facture.ma&nbsp;—&nbsp;</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">
-                la plateforme qui simplifie le travail des entreprises
-              </span>
+              Facture.ma — <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">Gérez votre entreprise plus vite, plus simplement</span>
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="text-lg sm:text-xl text-gray-600 mb-6">
-              Centralisez <strong>devis</strong>, <strong>factures</strong>, <strong>stock</strong>, <strong>fournisseurs</strong>, <strong>projets</strong> et <strong>équipe</strong> au même endroit.  
-              Du premier devis à l’export comptable, tout devient clair, rapide et professionnel.
+            <motion.p variants={fadeUp} className="text-lg sm:text-xl text-gray-700 mb-6">
+              Ne perdez plus de temps avec des fichiers éparpillés et des calculs compliqués.
+              Avec Facture.ma, vous centralisez <strong>devis</strong>, <strong>factures</strong>, <strong>paiements</strong>, <strong>stock</strong>, <strong>fournisseurs</strong>, <strong>projets</strong> et <strong>équipe</strong> dans une seule plateforme intelligente.
             </motion.p>
 
-            <motion.ul variants={fadeUp} className="space-y-2 text-gray-700 mb-8">
-              <li className="flex items-center gap-2"><Check className="w-5 h-5 text-teal-600" /> Mentions légales Maroc (ICE, IF, RC, TVA) automatiquement gérées</li>
-              <li className="flex items-center gap-2"><Check className="w-5 h-5 text-teal-600" /> Export comptable & PDF bilingue FR/AR</li>
-              <li className="flex items-center gap-2"><Check className="w-5 h-5 text-teal-600" /> Rôles, permissions & journal d’audit</li>
-            </motion.ul>
+            <motion.div variants={fadeUp} className="space-y-3 text-gray-800">
+              <div className="flex items-start gap-3"><span>✨</span><p><strong>Pourquoi choisir Facture.ma ?</strong></p></div>
+              <div className="flex items-start gap-3"><span>📑</span><p><strong>Facturation ultra-rapide</strong> : créez et envoyez vos devis & factures en quelques clics.</p></div>
+              <div className="flex items-start gap-3"><span>📊</span><p><strong>Tableau de bord intelligent</strong> : suivez vos ventes, dépenses, paiements reçus et impayés en temps réel.</p></div>
+              <div className="flex items-start gap-3"><span>🔔</span><p><strong>Rappels automatiques</strong> : ne laissez plus passer une facture impayée.</p></div>
+              <div className="flex items-start gap-3"><span>📦</span><p><strong>Gestion du stock</strong> : analysez vos produits, vos achats et vos ventes pour mieux piloter votre business.</p></div>
+              <div className="flex items-start gap-3"><span>🏦</span><p><strong>Export comptable & conformité légale</strong> : ICE, IF, RC, TVA gérés automatiquement + PDF bilingue FR.</p></div>
+              <div className="flex items-start gap-3"><span>💡</span><p><strong>Facture.ma, c’est plus qu’un logiciel</strong> : un partenaire de croissance — clair, rapide, 100 % conforme au Maroc.</p></div>
+            </motion.div>
 
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+            <motion.div variants={fadeUp} className="mt-7 flex flex-col sm:flex-row gap-3">
               <Link
                 to="/login"
                 className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -188,17 +190,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Secteurs d'activité */}
-      <section id="secteurs" className="py-16 bg-gradient-to-br from-sky-400 to-sky-500 text-white">
+      {/* Secteurs d'activité — NOUVELLE COULEUR (palette cohérente aux Modules) */}
+      <section id="secteurs" className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={staggerParent} className="text-center mb-12">
-            <motion.span variants={fadeUp} className="inline-block bg-white/20 px-4 py-1 rounded-md font-bold tracking-wider">FACTURE.MA</motion.span>
-            <motion.h2 variants={fadeUp} className="mt-4 text-3xl sm:text-4xl font-extrabold">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={staggerParent} className="text-center mb-10">
+            <motion.span variants={fadeUp} className="inline-block bg-gradient-to-r from-teal-600 to-blue-600 text-white px-4 py-1 rounded-md font-bold tracking-wider">
+              FACTURE.MA
+            </motion.span>
+            <motion.h2 variants={fadeUp} className="mt-4 text-3xl sm:text-4xl font-extrabold text-gray-900">
               UNE PLATEFORME QUI S’ADAPTE À VOTRE SECTEUR D’ACTIVITÉ
             </motion.h2>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/20 rounded-xl overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
             {[
               { icon: Building2, label: 'BTP' },
               { icon: BarChart3, label: 'Distribution' },
@@ -211,13 +215,13 @@ export default function HomePage() {
               return (
                 <motion.div
                   key={i}
-                  whileHover={{ scale: 1.03 }}
-                  className="bg-sky-500/20 backdrop-blur-sm p-8 text-center"
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  className="rounded-xl p-8 text-center bg-white border border-gray-200 shadow-sm hover:shadow-lg transition"
                 >
-                  <div className="mx-auto mb-3 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <div className="mx-auto mb-4 w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-blue-600 grid place-items-center">
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <div className="text-lg font-semibold">{s.label}</div>
+                  <div className="text-lg font-semibold text-gray-900">{s.label}</div>
                 </motion.div>
               );
             })}
@@ -225,7 +229,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Modules & tâches détaillés */}
+      {/* Modules & tâches détaillés (inchangé, palette teal→blue) */}
       <section id="modules" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div variants={staggerParent} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="text-center mb-12">
@@ -261,7 +265,7 @@ export default function HomePage() {
               </ul>
             </motion.div>
 
-            {/* Gestion financière — réorganisé */}
+            {/* Gestion financière */}
             <motion.div variants={fadeUp} whileHover={{ y: -4, scale: 1.02 }} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg">
               <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Calculator className="w-6 h-6 text-white" />
@@ -274,7 +278,7 @@ export default function HomePage() {
               </ul>
             </motion.div>
 
-            {/* Gestion humaine — congés & heures sup */}
+            {/* Gestion humaine */}
             <motion.div variants={fadeUp} whileHover={{ y: -4, scale: 1.02 }} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg">
               <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-white" />
@@ -287,7 +291,7 @@ export default function HomePage() {
               </ul>
             </motion.div>
 
-            {/* Fournisseurs — totaux, payés, reste à payer */}
+            {/* Fournisseurs */}
             <motion.div variants={fadeUp} whileHover={{ y: -4, scale: 1.02 }} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg">
               <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Briefcase className="w-6 h-6 text-white" />
@@ -333,19 +337,6 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li className="flex items-start gap-2"><BarChart3 className="w-4 h-4 mt-0.5 text-teal-600" /> <strong>Top clients</strong> & <strong>Top fournisseurs</strong> par CA.</li>
                 <li className="flex items-start gap-2"><Download className="w-4 h-4 mt-0.5 text-teal-600" /> Exports Excel/CSV pour votre comptable.</li>
-              </ul>
-            </motion.div>
-
-            {/* Gestion de compte (RBAC) */}
-            <motion.div variants={fadeUp} whileHover={{ y: -4, scale: 1.02 }} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg">
-              <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
-                <ShieldCheck className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Gestion de compte</h3>
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li className="flex items-start gap-2"><Users className="w-4 h-4 mt-0.5 text-teal-600" /> L’admin crée des comptes utilisateurs.</li>
-                <li className="flex items-start gap-2"><ShieldCheck className="w-4 h-4 mt-0.5 text-teal-600" /> Droits par module (devis, factures, stock, etc.).</li>
-                <li className="flex items-start gap-2"><ClipboardList className="w-4 h-4 mt-0.5 text-teal-600" /> Traçabilité & journal d’actions.</li>
               </ul>
             </motion.div>
           </motion.div>
