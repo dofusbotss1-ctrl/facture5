@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useLicense } from '../../contexts/LicenseContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   FileText,
@@ -111,77 +112,109 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
 
     if (canAccess) {
       return (
-        <NavLink
-          key={item.path}
-          to={item.path}
-          title={!open ? item.label : undefined}
-          className={({ isActive }) =>
-            `flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group ${
-              isActive ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'
-            }`
-          }
+        <motion.div
+          whileHover={{ x: 2 }}
+          transition={{ duration: 0.2 }}
         >
-          <Icon className={`${iconSize} flex-shrink-0`} />
-          {open && (
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">{item.label}</span>
-              {item.isPro && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full font-bold bg-orange-400 text-orange-900">PRO</span>
-              )}
-            </div>
-          )}
-        </NavLink>
+          <NavLink
+            key={item.path}
+            to={item.path}
+            title={!open ? item.label : undefined}
+            className={({ isActive }) =>
+              `flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group ${
+                isActive ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-lg' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`
+            }
+          >
+            <Icon className={`${iconSize} flex-shrink-0`} />
+            {open && (
+              <div className="flex items-center space-x-2">
+                <span className="font-medium">{item.label}</span>
+                {item.isPro && (
+                  <motion.span 
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="text-xs px-1.5 py-0.5 rounded-full font-bold bg-orange-400 text-orange-900"
+                  >
+                    PRO
+                  </motion.span>
+                )}
+              </div>
+            )}
+          </NavLink>
+        </motion.div>
       );
     }
 
     // Inaccessible (PRO mais non actif : essai Free OU PRO expiré)
     return (
-      <button
+      <motion.button
+        whileHover={{ x: 2 }}
+        transition={{ duration: 0.2 }}
         key={item.path}
         onClick={(e) => handleProFeatureClick(e, item.path)}
         title={!open ? `${item.label} (PRO)` : undefined}
-        className={`w-full flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group text-gray-500 hover:bg-red-50 hover:text-red-600`}
+        className={`w-full flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group text-gray-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400`}
       >
         <Icon className={`${iconSize} flex-shrink-0 text-red-500`} />
         {open && (
           <div className="flex items-center space-x-2">
             <span className="font-medium">{item.label}</span>
             {/* 🔒 pour les items PRO non accessibles */}
-            <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">🔒</span>
+            <motion.span 
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold"
+            >
+              🔒
+            </motion.span>
           </div>
         )}
-      </button>
+      </motion.button>
     );
   };
 
   return (
     <div
       className={`fixed inset-y-0 left-0 z-50 bg-white shadow-xl transform transition-all duration-300 ease-in-out ${
-        open ? 'w-50 translate-x-0' : 'w-16 translate-x-0'
-      }`}
+        open ? 'w-64 translate-x-0' : 'w-16 translate-x-0'
+      } dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}
     >
       {/* Header */}
-      <div className={`flex items-center justify-between h-14 ${open ? 'px-6' : 'px-3'} border-b border-gray-200`}>
+      <div className={`flex items-center justify-between h-16 ${open ? 'px-6' : 'px-3'} border-b border-gray-200 dark:border-gray-700`}>
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg flex items-center justify-center">
+          <motion.div 
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            className="w-8 h-8 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg"
+          >
             <Building2 className="w-5 h-5 text-white" />
-          </div>
+          </motion.div>
           {open && (
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Facture.ma</h1>
-              <p className="text-xs text-gray-500">ERP Morocco (V.1.25.5)</p>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Facture.ma</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">ERP Morocco (V.1.25.5)</p>
             </div>
           )}
         </div>
         <div className="hidden lg:block">
-          <button onClick={() => setOpen(!open)} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-            {open ? <ChevronLeft className="w-5 h-5 text-gray-500" /> : <ChevronRight className="w-5 h-5 text-gray-500" />}
-          </button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setOpen(!open)} 
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            {open ? (
+              <ChevronLeft className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            ) : (
+              <ChevronRight className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            )}
+          </motion.button>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className={`mt-6 ${open ? 'px-3' : 'px-2'}`}>
+      <nav className={`mt-6 ${open ? 'px-3' : 'px-2'} overflow-y-auto flex-1 pb-32`}>
         <ul className="space-y-2">
           {/* Menu principal */}
           {visiblePrimary.map((item) => (
@@ -191,16 +224,20 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           {/* Dossier Gestion */}
           {visibleGestion.length > 0 && (
             <li>
-              <button
+              <motion.button
+                whileHover={{ x: 2 }}
+                transition={{ duration: 0.2 }}
                 onClick={() => setIsGestionOpen((v) => !v)}
-                className={`w-full flex items-center ${open ? 'space-x-3 px-3' : 'justify-center px-2'} py-2.5 rounded-lg transition-all duration-200 group text-gray-700 hover:bg-gray-100`}
+                className={`w-full flex items-center ${open ? 'space-x-3 px-3' : 'justify-center px-2'} py-2.5 rounded-lg transition-all duration-200 group text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                 title={!open ? 'Gestion' : undefined}
               >
                 {/* Icône + pastille en mode réduit */}
                 <div className="relative">
                   <FolderKanban className={`${open ? 'w-5 h-5' : 'w-6 h-6'} flex-shrink-0`} />
                   {!open && (
-                    <span
+                    <motion.span
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
                       className={`absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full border border-white ${
                         isProActive ? 'bg-orange-400' : 'bg-red-500'
                       }`}
@@ -216,37 +253,65 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
 
                     {/* ✅ Badge : PRO orange (actif) / 🔒 rouge (expiré) / PRO rouge (Free) */}
                     {isProActive ? (
-                      <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-orange-50 text-orange-700 border-orange-300">
+                      <motion.span 
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-300 dark:border-orange-600"
+                      >
                         PRO
-                      </span>
+                      </motion.span>
                     ) : isProExpired ? (
-                      <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                      <motion.span 
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                        className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold"
+                      >
                         🔒
-                      </span>
+                      </motion.span>
                     ) : (
-                      <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                      <motion.span 
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                        className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold"
+                      >
                         🔒
-                      </span>
+                      </motion.span>
                     )}
 
-                    <span className="ml-auto text-xs text-gray-500">{visibleGestion.length}</span>
-                    {isGestionOpen ? (
-                      <ChevronDown className="w-4 h-4 text-gray-500" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-500" />
-                    )}
+                    <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{visibleGestion.length}</span>
+                    <motion.div
+                      animate={{ rotate: isGestionOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    </motion.div>
                   </>
                 )}
-              </button>
+              </motion.button>
 
               {/* Sous-menus */}
-              {isGestionOpen && (
-                <ul className="mt-1 space-y-1">
-                  {visibleGestion.map((item) => (
-                    <li key={item.path}>{renderItem(item, 1)}</li>
-                  ))}
-                </ul>
-              )}
+              <AnimatePresence>
+                {isGestionOpen && (
+                  <motion.ul
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-1 space-y-1 overflow-hidden"
+                  >
+                    {visibleGestion.map((item, index) => (
+                      <motion.li 
+                        key={item.path}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.2, delay: index * 0.05 }}
+                      >
+                        {renderItem(item, 1)}
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
             </li>
           )}
 
@@ -260,13 +325,14 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
       {/* Bandeau bas (licence / rôle) */}
       <div className={`absolute bottom-6 ${open ? 'left-3 right-3' : 'left-2 right-2'}`}>
         {user && (
-          <div
+          <motion.div
+            whileHover={{ scale: 1.02 }}
             className={`mb-3 ${open ? 'p-2' : 'p-1'} rounded-lg text-center ${open ? 'text-xs' : 'text-[10px]'} ${
               user.email === 'admin@facture.ma'
-                ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white'
+                ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg'
                 : user.isAdmin
-                ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white'
-                : 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                : 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-lg'
             }`}
           >
             {open
@@ -280,11 +346,14 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
               : user.isAdmin
               ? '👑'
               : '👤'}
-          </div>
+          </motion.div>
         )}
 
         {isProActive ? (
-          <div className={`bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className={`bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center shadow-lg`}
+          >
             <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>{open ? '👑 Pro' : '👑'}</div>
             {user?.company?.expiryDate &&
               (() => {
@@ -293,7 +362,11 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                 const timeDiff = expiry.getTime() - currentDate.getTime();
                 const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
                 return (
-                  <div className={`${open ? 'text-xs' : 'text-[8px]'} ${daysRemaining <= 5 ? 'animate-pulse font-bold' : 'opacity-90'}`}>
+                  <motion.div 
+                    animate={daysRemaining <= 5 ? { scale: [1, 1.05, 1] } : {}}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    className={`${open ? 'text-xs' : 'text-[8px]'} ${daysRemaining <= 5 ? 'font-bold' : 'opacity-90'}`}
+                  >
                     {daysRemaining <= 5 && daysRemaining > 0 ? (
                       <span className="text-yellow-200">
                         {open ? `⚠️ Expire dans ${daysRemaining} jour${daysRemaining > 1 ? 's' : ''}` : '⚠️'}
@@ -307,25 +380,31 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                           : expiry.toLocaleDateString('fr-FR', { day: 'numeric', month: 'numeric' })}
                       </span>
                     )}
-                  </div>
+                  </motion.div>
                 );
               })()}
-          </div>
+          </motion.div>
         ) : isActivationPending ? (
-          <div className={`bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
+          <motion.div 
+            animate={{ opacity: [1, 0.7, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className={`bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center shadow-lg`}
+          >
             <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>{open ? '⏳ Activation en cours' : '⏳'}</div>
             {open && <div className="text-xs opacity-90">Traitement sous 2h</div>}
-          </div>
+          </motion.div>
         ) : user?.isAdmin ? (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={onUpgrade}
             title={!open ? 'Acheter version Pro' : undefined}
             className={`w-full bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center transition-all duration-200 hover:shadow-lg`}
           >
             <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium`}>{open ? '🆓 Free - Acheter version Pro' : '🆓'}</div>
-          </button>
+          </motion.button>
         ) : (
-          <div className={`bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
+          <div className={`bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center shadow-lg`}>
             <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium`}>{open ? '👤 Compte Utilisateur' : '👤'}</div>
           </div>
         )}
