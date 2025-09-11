@@ -5,6 +5,9 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { DataProvider } from './contexts/DataContext';
 import { LicenseProvider } from './contexts/LicenseContext';
 import { UserManagementProvider } from './contexts/UserManagementContext';
+import { SupplierProvider } from './contexts/SupplierContext';
+import SubscriptionAlert from './components/common/SubscriptionAlert';
+import CommandPalette from './components/common/CommandPalette';
 import ExpirationNotification from './components/auth/ExpirationNotification';
 import ExpiredAccountModal from './components/auth/ExpiredAccountModal';
 import HomePage from './components/home/HomePage';
@@ -32,7 +35,6 @@ import SupplierManagement from './components/suppliers/SupplierManagement';
 import SuppliersSection from './components/suppliers/SuppliersSection';
 import AccountManagement from './components/account/AccountManagement';
 import ProjectManagement from './components/projects/ProjectManagement';
-import { SupplierProvider } from './contexts/SupplierContext';
 
 function AppContent() {
   const { user, isAuthenticated, showExpiryAlert, setShowExpiryAlert, expiredDate, subscriptionStatus } = useAuth();
@@ -116,6 +118,12 @@ function AppContent() {
   }
   return (
     <>
+      {/* Alerte d'abonnement - sticky top */}
+      <SubscriptionAlert />
+      
+      {/* Command Palette */}
+      <CommandPalette />
+      
       {/* Notification d'expiration proche */}
       {showExpirationNotification && subscriptionStatus.shouldShowNotification && (
         <ExpirationNotification
@@ -125,16 +133,16 @@ function AppContent() {
         />
       )}
       
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors">
       <LicenseAlert onUpgrade={() => setShowUpgradePage(true)} />
       <Sidebar 
         open={sidebarOpen} 
         setOpen={setSidebarOpen} 
         onUpgrade={() => setShowUpgradePage(true)} 
       />
-      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
+      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'} pt-16`}>
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="p-6">
+        <main className="p-6 pt-0">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />

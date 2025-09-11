@@ -1,6 +1,7 @@
 import React from 'react';
 import { useData } from '../../contexts/DataContext';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { motion } from 'framer-motion';
 import { DollarSign, FileText, Users, Package } from 'lucide-react';
 
 export default function StatsCards() {
@@ -65,26 +66,44 @@ export default function StatsCards() {
         const Icon = stat.icon;
         
         return (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
+          <motion.div 
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            whileHover={{ 
+              scale: 1.02, 
+              y: -4,
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+            }}
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200 group cursor-pointer"
+          >
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-600 mb-1">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                     {stat.title}
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 mb-2">
+                  <motion.p 
+                    whileHover={{ scale: 1.05 }}
+                    className="text-2xl font-bold text-gray-900 dark:text-white mb-2"
+                  >
                     {stat.value}
-                  </p>
-                  <p className="text-xs text-gray-500">
+                  </motion.p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {stat.subtitle}
                   </p>
                 </div>
-                <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center shadow-lg`}>
+                <motion.div 
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                  className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl`}
+                >
                   <Icon className="w-6 h-6 text-white" />
-                </div>
+                </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </div>

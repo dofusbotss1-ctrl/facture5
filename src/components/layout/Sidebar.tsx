@@ -93,7 +93,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
 
   const [isGestionOpen, setIsGestionOpen] = React.useState(false);
 
-  // ------- Rendu d’un item
+  // ------- Rendu d'un item
   const renderItem = (
     item: {
       icon: any;
