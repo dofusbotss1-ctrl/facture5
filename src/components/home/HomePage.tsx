@@ -532,17 +532,17 @@ export default function HomePage() {
               </div>
             </div>
 
-           {/* Liens rapides */}
-<div>
-  <h4 className="font-semibold mb-4">Liens rapides</h4>
-  <ul className="space-y-2 text-gray-400">
-    <li><a href="#modules" className="hover:text-white transition-colors">Modules</a></li>
-    <li><a href="#tarifs" className="hover:text-white transition-colors">Tarifs</a></li>
-    <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
-    <li><Link to="/login" className="hover:text-white transition-colors">Connexion</Link></li>
-  </ul>
-</div>
+            <div>
+              <h4 className="font-semibold mb-4">Liens rapides</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">CGU</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Confidentialité</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+              </ul>
+            </div>
 
+            
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <div className="space-y-3 text-gray-400">
