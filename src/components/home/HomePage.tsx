@@ -536,7 +536,6 @@ export default function HomePage() {
 <div>
   <h4 className="font-semibold mb-4">Liens rapides</h4>
   <ul className="space-y-2 text-gray-400">
-    <li><a href="#accueil" className="hover:text-white transition-colors">Accueil</a></li>
     <li><a href="#secteurs" className="hover:text-white transition-colors">Secteurs</a></li>
     <li><a href="#modules" className="hover:text-white transition-colors">Modules</a></li>
     <li><a href="#tarifs" className="hover:text-white transition-colors">Tarifs</a></li>
