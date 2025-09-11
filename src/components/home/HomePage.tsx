@@ -287,7 +287,6 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li className="flex items-start gap-2"><ClipboardList className="w-4 h-4 mt-0.5 text-teal-600" /> Fiches employés, rôles & permissions.</li>
                 <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 text-teal-600" /> Gestion des <strong>congés</strong> & <strong>heures supplémentaires</strong>.</li>
-                <li className="flex items-start gap-2"><MessageSquare className="w-4 h-4 mt-0.5 text-teal-600" /> Notes internes & historique.</li>
               </ul>
             </motion.div>
 
