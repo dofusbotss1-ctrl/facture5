@@ -5,9 +5,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { DataProvider } from './contexts/DataContext';
 import { LicenseProvider } from './contexts/LicenseContext';
 import { UserManagementProvider } from './contexts/UserManagementContext';
-import { SupplierProvider } from './contexts/SupplierContext';
-import SubscriptionAlert from './components/common/SubscriptionAlert';
-import CommandPalette from './components/common/CommandPalette';
+import { ThemeProvider } from './contexts/ThemeContext';
 import ExpirationNotification from './components/auth/ExpirationNotification';
 import ExpiredAccountModal from './components/auth/ExpiredAccountModal';
 import HomePage from './components/home/HomePage';
@@ -15,6 +13,8 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
+import GlobalSearch from './components/layout/GlobalSearch';
+import NotificationCenter from './components/layout/NotificationCenter';
 import InvoicesList from './components/invoices/InvoicesList';
 import CreateInvoice from './components/invoices/CreateInvoice';
 import QuotesList from './components/quotes/QuotesList';
@@ -35,6 +35,7 @@ import SupplierManagement from './components/suppliers/SupplierManagement';
 import SuppliersSection from './components/suppliers/SuppliersSection';
 import AccountManagement from './components/account/AccountManagement';
 import ProjectManagement from './components/projects/ProjectManagement';
+import { SupplierProvider } from './contexts/SupplierContext';
 
 function AppContent() {
   const { user, isAuthenticated, showExpiryAlert, setShowExpiryAlert, expiredDate, subscriptionStatus } = useAuth();
@@ -45,6 +46,8 @@ function AppContent() {
   const [showExpiredModal, setShowExpiredModal] = useState(false);
   const [isRenewalFlow, setIsRenewalFlow] = useState(false);
   const [showBlockedUserModal, setShowBlockedUserModal] = useState(false);
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Gérer les notifications d'expiration
   useEffect(() => {
@@ -92,6 +95,22 @@ function AppContent() {
     }
   }, []);
 
+  // Gestion des raccourcis clavier
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowGlobalSearch(true);
+      }
+      if (e.key === 'Escape') {
+        setShowGlobalSearch(false);
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
@@ -118,31 +137,32 @@ function AppContent() {
   }
   return (
     <>
-      {/* Alerte d'abonnement - sticky top */}
-      <SubscriptionAlert />
-      
-      {/* Command Palette */}
-      <CommandPalette />
-      
-      {/* Notification d'expiration proche */}
+      {/* Notification d'expiration proche - FIXE AU-DESSUS DE TOUT */}
       {showExpirationNotification && subscriptionStatus.shouldShowNotification && (
-        <ExpirationNotification
-          daysRemaining={subscriptionStatus.daysRemaining}
-          onRenew={handleRenewSubscription}
-          onDismiss={handleDismissNotification}
-        />
+        <div className="fixed top-0 left-0 right-0 z-[100]">
+          <ExpirationNotification
+            daysRemaining={subscriptionStatus.daysRemaining}
+            onRenew={handleRenewSubscription}
+            onDismiss={handleDismissNotification}
+          />
+        </div>
       )}
       
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors">
+    <div className={`min-h-screen bg-gray-50 flex ${showExpirationNotification && subscriptionStatus.shouldShowNotification ? 'pt-16' : ''}`}>
       <LicenseAlert onUpgrade={() => setShowUpgradePage(true)} />
       <Sidebar 
         open={sidebarOpen} 
         setOpen={setSidebarOpen} 
         onUpgrade={() => setShowUpgradePage(true)} 
       />
-      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'} pt-16`}>
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="p-6 pt-0">
+      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
+        <Header 
+          sidebarOpen={sidebarOpen} 
+          setSidebarOpen={setSidebarOpen}
+          onOpenSearch={() => setShowGlobalSearch(true)}
+          onOpenNotifications={() => setShowNotifications(true)}
+        />
+        <main className="p-6">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -165,6 +185,17 @@ function AppContent() {
         </main>
       </div>
       
+      {/* Recherche globale */}
+      <GlobalSearch 
+        isOpen={showGlobalSearch}
+        onClose={() => setShowGlobalSearch(false)}
+      />
+
+      {/* Centre de notifications */}
+      <NotificationCenter 
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
       
       {showUpgradePage && (
         <UpgradePage 
@@ -224,6 +255,7 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
           <UserManagementProvider>
@@ -237,6 +269,7 @@ function App() {
           </UserManagementProvider>
         </AuthProvider>
       </LanguageProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
