@@ -46,8 +46,12 @@ export default function TopProducts() {
     >
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Top 3 Produits les Plus Vendus</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Classement par quantité vendue</p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Top 3 Produits les Plus Vendus
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Classement par quantité vendue
+          </p>
         </div>
         <motion.div 
           animate={{ rotate: [0, 10, -10, 0] }}
@@ -75,14 +79,19 @@ export default function TopProducts() {
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg ${
-                    index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' :
-                    index === 1 ? 'bg-gradient-to-br from-gray-400 to-gray-600' :
-                    'bg-gradient-to-br from-orange-400 to-orange-600'
-                  }`}>
+                      index === 0
+                        ? 'bg-gradient-to-br from-yellow-400 to-yellow-600'
+                        : index === 1
+                        ? 'bg-gradient-to-br from-gray-400 to-gray-600'
+                        : 'bg-gradient-to-br from-orange-400 to-orange-600'
+                    }`}
+                  >
                     #{index + 1}
                   </motion.div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{product.name}</p>
+                    <p className="font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                      {product.name}
+                    </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{product.category}</p>
                   </div>
                 </div>
@@ -97,7 +106,9 @@ export default function TopProducts() {
                     {product.revenue.toLocaleString()} MAD
                   </motion.span>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{product.sales.toFixed(3)} {product.uniti}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {product.sales.toFixed(3)} {product.uniti}
+                </p>
               </div>
             </motion.div>
           ))
@@ -109,9 +120,10 @@ export default function TopProducts() {
           >
             <Package className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
             <p className="text-gray-500 dark:text-gray-400">Aucun produit enregistré</p>
-            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Ajoutez des produits pour voir les statistiques</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+              Ajoutez des produits pour voir les statistiques
+            </p>
           </motion.div>
-          </div>
         )}
       </div>
     </motion.div>
