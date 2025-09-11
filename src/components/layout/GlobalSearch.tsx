@@ -96,6 +96,12 @@ export default function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
       }
     });
 
+
+
+
+
+    
+
     return results.slice(0, 8); // Limiter à 8 résultats
   }, [searchTerm, invoices, clients, products, quotes, navigate]);
 
