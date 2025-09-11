@@ -1,3 +1,4 @@
+// src/components/Sidebar/Sidebar.tsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -13,7 +14,7 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
-  ChevronDown, // ✅ pour le dossier Gestion
+  ChevronDown,
   FileCheck,
   TrendingUp,
   UserCheck,
@@ -21,6 +22,7 @@ import {
   Shield,
   FolderKanban
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SidebarProps {
   open: boolean;
@@ -39,7 +41,6 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
     user?.company?.expiryDate &&
     new Date(user.company.expiryDate) > new Date();
 
-  // ➕ PRO expiré (spécifique à ta demande)
   const isProExpired =
     user?.company?.subscription === 'pro' &&
     user?.company?.expiryDate &&
@@ -49,7 +50,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
   const canAccessProFeatures = isProActive;
 
   // Activation en cours ?
-  const isActivationPending = localStorage.getItem('proActivationPending') === 'true';
+  const isActivationPending = typeof window !== 'undefined' && localStorage.getItem('proActivationPending') === 'true';
 
   // ------- Permissions
   const hasPermission = (permission: string) => {
@@ -90,9 +91,11 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
   const visibleGestion = gestionMenu.filter((i) => hasPermission(i.permission || ''));
   const visibleSettings = settingsMenu.filter((i) => hasPermission(i.permission || ''));
 
+  // Etat du dossier & hover pour panneau volant en mode réduit
   const [isGestionOpen, setIsGestionOpen] = React.useState(false);
+  const [hoverGestion, setHoverGestion] = React.useState(false);
 
-  // ------- Rendu d’un item
+  // ------- Rendu d’un item de menu
   const renderItem = (
     item: {
       icon: any;
@@ -106,8 +109,62 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
     const isProFeature = item.isPro;
     const canAccess = !isProFeature || canAccessProFeatures;
 
-    const basePadding = open ? (depth === 0 ? 'px-3' : 'pl-10 pr-3') : 'px-2';
+    const padding = open ? (depth === 0 ? 'px-3' : 'pl-10 pr-3') : 'px-2';
     const iconSize = open ? 'w-5 h-5' : 'w-6 h-6';
+
+    // Template pour un lien (actif/inactif) avec indicator animé
+    const LinkTemplate = (isActive: boolean) => (
+      <div
+        className={`relative flex items-center ${open ? 'space-x-3' : 'justify-center'} ${padding} py-2.5 rounded-lg transition-all duration-200 group ${
+          isActive ? 'text-white' : 'text-gray-700 hover:bg-gray-100'
+        }`}
+      >
+        {/* Barre active côté gauche */}
+        <AnimatePresence>
+          {isActive && (
+            <motion.span
+              layoutId="sidebar-active-bar"
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1.5 rounded-r-full bg-gradient-to-b from-teal-500 to-blue-500"
+              initial={{ opacity: 0, scaleY: 0.6 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              exit={{ opacity: 0, scaleY: 0.6 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Icône avec micro-anim */}
+        <motion.div whileHover={{ rotate: 0.0001, scale: 1.05 }} className="relative z-[1]">
+          <Icon className={`${iconSize} flex-shrink-0 ${isActive ? 'text-white' : ''}`} />
+        </motion.div>
+
+        {/* Libellé + badge PRO (quand ouvert) */}
+        {open && (
+          <div className="relative z-[1] flex items-center space-x-2">
+            <span className="font-medium">{item.label}</span>
+            {item.isPro && canAccess && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-orange-50 text-orange-700 border-orange-300">
+                PRO
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Halo animé derrière l'item actif */}
+        <AnimatePresence>
+          {isActive && (
+            <motion.span
+              layoutId="sidebar-active-halo"
+              className="absolute inset-0 rounded-lg bg-gradient-to-r from-teal-500 to-blue-500"
+              style={{ opacity: 0.12 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.12 }}
+              exit={{ opacity: 0 }}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    );
 
     if (canAccess) {
       return (
@@ -116,56 +173,64 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           to={item.path}
           title={!open ? item.label : undefined}
           className={({ isActive }) =>
-            `flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group ${
-              isActive ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'
-            }`
+            `relative overflow-hidden rounded-lg ${isActive ? 'shadow-lg' : ''}`
           }
         >
-          <Icon className={`${iconSize} flex-shrink-0`} />
-          {open && (
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">{item.label}</span>
-              {item.isPro && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full font-bold bg-orange-400 text-orange-900">PRO</span>
-              )}
-            </div>
-          )}
+          {({ isActive }) => LinkTemplate(isActive)}
         </NavLink>
       );
     }
 
-    // Inaccessible (PRO mais non actif : essai Free OU PRO expiré)
+    // Inaccessible (PRO non actif / expiré) -> bouton qui ouvre upgrade
     return (
       <button
         key={item.path}
         onClick={(e) => handleProFeatureClick(e, item.path)}
         title={!open ? `${item.label} (PRO)` : undefined}
-        className={`w-full flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group text-gray-500 hover:bg-red-50 hover:text-red-600`}
+        className={`w-full relative overflow-hidden rounded-lg`}
       >
-        <Icon className={`${iconSize} flex-shrink-0 text-red-500`} />
-        {open && (
-          <div className="flex items-center space-x-2">
-            <span className="font-medium">{item.label}</span>
-            {/* 🔒 pour les items PRO non accessibles */}
-            <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">🔒</span>
-          </div>
-        )}
+        <div className={`relative flex items-center ${open ? 'space-x-3' : 'justify-center'} ${padding} py-2.5 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all`}>
+          <Icon className={`${iconSize} flex-shrink-0 text-red-500`} />
+          {open && (
+            <div className="flex items-center space-x-2">
+              <span className="font-medium">{item.label}</span>
+              {/* 🔒 rouge : tu l’avais demandé pour l'abonnement expiré / non accessible */}
+              <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">🔒</span>
+            </div>
+          )}
+        </div>
       </button>
     );
   };
 
+  // Variants animation
+  const collapseVariants = {
+    open: { width: 256 },
+    closed: { width: 64 }
+  };
+
+  const subMenuVariants = {
+    hidden: { height: 0, opacity: 0 },
+    show: { height: 'auto', opacity: 1, transition: { duration: 0.25, ease: 'easeOut' } },
+    exit: { height: 0, opacity: 0, transition: { duration: 0.2, ease: 'easeIn' } }
+  };
+
   return (
-    <div
-      className={`fixed inset-y-0 left-0 z-50 bg-white shadow-xl transform transition-all duration-300 ease-in-out ${
-        open ? 'w-50 translate-x-0' : 'w-16 translate-x-0'
-      }`}
+    <motion.aside
+      initial={false}
+      animate={open ? 'open' : 'closed'}
+      variants={collapseVariants}
+      className="fixed inset-y-0 left-0 z-50 border-r border-gray-200 bg-white/95 backdrop-blur-sm shadow-xl"
     >
+      {/* Bande verticale décorative (léger gradient bleu) */}
+      <div className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-teal-500 to-blue-600" />
+
       {/* Header */}
       <div className={`flex items-center justify-between h-14 ${open ? 'px-6' : 'px-3'} border-b border-gray-200`}>
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg flex items-center justify-center">
+          <motion.div whileHover={{ rotate: 10 }} className="w-8 h-8 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg grid place-items-center">
             <Building2 className="w-5 h-5 text-white" />
-          </div>
+          </motion.div>
           {open && (
             <div>
               <h1 className="text-lg font-bold text-gray-900">Facture.ma</h1>
@@ -181,7 +246,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className={`mt-6 ${open ? 'px-3' : 'px-2'}`}>
+      <nav className={`mt-6 ${open ? 'px-3' : 'px-2'} relative h-[calc(100%-7.5rem)] overflow-y-auto`}>
         <ul className="space-y-2">
           {/* Menu principal */}
           {visiblePrimary.map((item) => (
@@ -190,9 +255,13 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
 
           {/* Dossier Gestion */}
           {visibleGestion.length > 0 && (
-            <li>
+            <li
+              onMouseEnter={() => setHoverGestion(true)}
+              onMouseLeave={() => setHoverGestion(false)}
+              className="relative"
+            >
               <button
-                onClick={() => setIsGestionOpen((v) => !v)}
+                onClick={() => open && setIsGestionOpen((v) => !v)}
                 className={`w-full flex items-center ${open ? 'space-x-3 px-3' : 'justify-center px-2'} py-2.5 rounded-lg transition-all duration-200 group text-gray-700 hover:bg-gray-100`}
                 title={!open ? 'Gestion' : undefined}
               >
@@ -208,12 +277,11 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                   )}
                 </div>
 
-                {/* Libellé + badge en mode ouvert */}
+                {/* Libellé + badge si ouvert */}
                 {open && (
                   <>
                     <span className="font-semibold">Gestion</span>
-
-                    {/* ✅ Badge : PRO orange (actif) / 🔒 rouge (expiré) / PRO rouge (Free) */}
+                    {/* Badge : PRO orange / 🔒 si expiré / PRO rouge si Free */}
                     {isProActive ? (
                       <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-orange-50 text-orange-700 border-orange-300">
                         PRO
@@ -223,11 +291,10 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                         🔒
                       </span>
                     ) : (
-                      <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                     <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
                         🔒
                       </span>
                     )}
-
                     <span className="ml-auto text-xs text-gray-500">{visibleGestion.length}</span>
                     {isGestionOpen ? (
                       <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -238,14 +305,44 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                 )}
               </button>
 
-              {/* Sous-menus */}
-              {isGestionOpen && (
-                <ul className="mt-1 space-y-1">
-                  {visibleGestion.map((item) => (
-                    <li key={item.path}>{renderItem(item, 1)}</li>
-                  ))}
-                </ul>
-              )}
+              {/* Sous-menus (version intérieure quand la sidebar est ouverte) */}
+              <AnimatePresence initial={false}>
+                {open && isGestionOpen && (
+                  <motion.ul
+                    key="gestion-open"
+                    variants={subMenuVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
+                    className="mt-1 space-y-1"
+                  >
+                    {visibleGestion.map((item) => (
+                      <li key={item.path}>{renderItem(item, 1)}</li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+
+              {/* Panneau volant (hover) quand la sidebar est réduite */}
+              <AnimatePresence>
+                {!open && hoverGestion && (
+                  <motion.div
+                    key="gestion-flyout"
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -8 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute left-full top-0 ml-2 w-64 rounded-xl border border-gray-200 bg-white shadow-2xl p-2"
+                  >
+                    <div className="px-2 py-2 text-xs font-semibold text-gray-600">Gestion</div>
+                    <ul className="space-y-1">
+                      {visibleGestion.map((item) => (
+                        <li key={item.path}>{renderItem(item, 1)}</li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
           )}
 
@@ -257,7 +354,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
       </nav>
 
       {/* Bandeau bas (licence / rôle) */}
-      <div className={`absolute bottom-6 ${open ? 'left-3 right-3' : 'left-2 right-2'}`}>
+      <div className={`absolute bottom-4 ${open ? 'left-3 right-3' : 'left-2 right-2'}`}>
         {user && (
           <div
             className={`mb-3 ${open ? 'p-2' : 'p-1'} rounded-lg text-center ${open ? 'text-xs' : 'text-[10px]'} ${
@@ -282,6 +379,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           </div>
         )}
 
+        {/* Carte d’état Pro / Upgrade */}
         {isProActive ? (
           <div className={`bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
             <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>{open ? '👑 Pro' : '👑'}</div>
@@ -329,6 +427,6 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           </div>
         )}
       </div>
-    </div>
+    </motion.aside>
   );
 }
