@@ -125,6 +125,8 @@ export default function HomePage() {
               <div className="flex items-start gap-3"><span>📑</span><p><strong>Facturation ultra-rapide</strong> : créez et envoyez vos devis & factures en quelques clics.</p></div>
               <div className="flex items-start gap-3"><span>📊</span><p><strong>Tableau de bord intelligent</strong> : suivez vos ventes, dépenses, paiements reçus et impayés en temps réel.</p></div>
            
+              <div className="flex items-start gap-3"><span>🏦</span><p><strong>Export comptable & conformité légale</strong> : ICE, IF, RC, TVA gérés automatiquement + PDF bilingue FR.</p></div>
+              <div className="flex items-start gap-3"><span>💡</span><p><strong>Facture.ma, c’est plus qu’un logiciel</strong> : un partenaire de croissance — clair, rapide, 100 % conforme au Maroc.</p></div>
               
             </motion.div>
 
