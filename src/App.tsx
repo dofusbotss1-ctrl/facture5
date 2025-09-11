@@ -148,7 +148,7 @@ function AppContent() {
         </div>
       )}
       
-    <div className={`min-h-screen bg-gray-50 flex ${showExpirationNotification && subscriptionStatus.shouldShowNotification ? 'pt-16' : ''}`}>
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 flex ${showExpirationNotification && subscriptionStatus.shouldShowNotification ? 'pt-16' : ''}`}>
       <LicenseAlert onUpgrade={() => setShowUpgradePage(true)} />
       <Sidebar 
         open={sidebarOpen} 
@@ -162,7 +162,7 @@ function AppContent() {
           onOpenSearch={() => setShowGlobalSearch(true)}
           onOpenNotifications={() => setShowNotifications(true)}
         />
-        <main className="p-6">
+        <main className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />

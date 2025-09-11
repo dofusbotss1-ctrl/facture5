@@ -451,12 +451,12 @@ export default function Reports() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center space-x-2">
             <BarChart3 className="w-8 h-8 text-blue-600" />
             <span>Tableau de Bord Financier</span>
             <Crown className="w-6 h-6 text-yellow-500" />
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
             Analyse complète de vos performances financières avec graphiques interactifs et KPIs avancés.
           </p>
         </div>
@@ -467,7 +467,7 @@ export default function Reports() {
             className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
               compareMode 
                 ? 'bg-purple-600 text-white' 
-                : 'border border-gray-300 hover:bg-gray-50'
+                : 'border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
             }`}
           >
             <Eye className="w-4 h-4" />
@@ -487,17 +487,17 @@ export default function Reports() {
       <FinancialAlerts invoices={filteredInvoices} />
 
       {/* Filtres avancés */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Calendar className="w-4 h-4 inline mr-1" />
               Période
             </label>
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               {periods.map(period => (
                 <option key={period.id} value={period.id}>{period.label}</option>
@@ -506,14 +506,14 @@ export default function Reports() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Users className="w-4 h-4 inline mr-1" />
               Client
             </label>
             <select
               value={selectedClient}
               onChange={(e) => setSelectedClient(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="all">Tous les clients</option>
               {clients.map(client => (
@@ -523,14 +523,14 @@ export default function Reports() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Package className="w-4 h-4 inline mr-1" />
               Produit
             </label>
             <select
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="all">Tous les produits</option>
               {products.map(product => (
@@ -540,14 +540,14 @@ export default function Reports() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <DollarSign className="w-4 h-4 inline mr-1" />
               Mode de paiement
             </label>
             <select
               value={selectedPaymentMethod}
               onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="all">Tous les modes</option>
               <option value="virement">Virement</option>
@@ -565,7 +565,7 @@ export default function Reports() {
                 setSelectedPaymentMethod('all');
                 setSelectedPeriod('month');
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm text-gray-900 dark:text-white"
             >
               Réinitialiser
             </button>
@@ -573,13 +573,13 @@ export default function Reports() {
         </div>
 
         {compareMode && (
-          <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <div className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg">
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-purple-900">Mode Comparaison:</span>
+              <span className="text-sm font-medium text-purple-900 dark:text-purple-300">Mode Comparaison:</span>
               <select
                 value={comparePeriod}
-                onChange={(e) => setComparePeriod(e.target.value)}
-                className="px-3 py-1 border border-purple-300 rounded text-sm"
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                className="px-3 py-1 border border-purple-300 dark:border-purple-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="previous">Période précédente</option>
                 <option value="lastYear">Même période année dernière</option>
@@ -590,8 +590,8 @@ export default function Reports() {
       </div>
 
       {/* Navigation par onglets */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8 px-6">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -622,16 +622,16 @@ export default function Reports() {
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600 mb-1">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                         {stat.title}
                       </p>
-                      <p className="text-2xl font-bold text-gray-900 mb-1">
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                         {stat.value}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {stat.subtitle}
                       </p>
                     </div>

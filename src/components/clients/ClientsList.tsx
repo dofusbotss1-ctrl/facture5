@@ -61,7 +61,7 @@ export default function ClientsList() {
     <>
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t('clients')}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('clients')}</h1>
         <button 
           onClick={() => setIsAddModalOpen(true)}
           className="inline-flex items-center space-x-2 bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-200"
@@ -72,16 +72,16 @@ export default function ClientsList() {
       </div>
 
       {/* Search */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+            <Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           </div>
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             placeholder="Rechercher par nom, ICE ou email..."
           />
         </div>
@@ -94,9 +94,9 @@ export default function ClientsList() {
           const lastInvoiceDate = getLastInvoiceDate(client.id);
           
           return (
-          <div key={client.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-200">
+          <div key={client.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-200">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 truncate">{client.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">{client.name}</h3>
               <div className="flex space-x-2">
                 <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                   <Eye className="w-4 h-4" />
@@ -119,15 +119,15 @@ export default function ClientsList() {
             </div>
 
             <div className="space-y-3 mb-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                 <span className="font-medium">ICE:</span>
                 <span>{client.ice}</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                 <Phone className="w-4 h-4" />
                 <span>{client.phone}</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                 <Mail className="w-4 h-4" />
                 <span className="truncate">{client.email}</span>
               </div>
@@ -147,7 +147,7 @@ export default function ClientsList() {
               
               {stats.totalInvoices > 0 && lastInvoiceDate && (
                 <div className="mt-3 text-center">
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     Dernière facture: {lastInvoiceDate}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ export default function ClientsList() {
 
       {filteredClients.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">Aucun client trouvé</p>
+          <p className="text-gray-500 dark:text-gray-400">Aucun client trouvé</p>
         </div>
       )}
 

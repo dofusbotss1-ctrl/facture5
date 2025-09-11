@@ -74,11 +74,11 @@ export default function SuppliersSection() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center space-x-2">
           <Building2 className="w-8 h-8 text-orange-600" />
           <span>Fournisseurs</span>
           {licenseType === 'free' && (
-            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+            <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full">
               {getRemainingCount('suppliers')}/{10} restants
             </span>
           )}
@@ -94,12 +94,12 @@ export default function SuppliersSection() {
 
       {/* Alerte limite */}
       {licenseType === 'free' && !checkLimit('suppliers') && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
           <div className="flex items-center space-x-3">
             <AlertTriangle className="w-6 h-6 text-red-600" />
             <div>
-              <h3 className="font-semibold text-red-900">Limite atteinte</h3>
-              <p className="text-red-800 text-sm">
+              <h3 className="font-semibold text-red-900 dark:text-red-300">Limite atteinte</h3>
+              <p className="text-red-800 dark:text-red-300 text-sm">
                 Vous avez atteint la limite de 10 fournisseurs. Passez à la version PRO pour débloquer un nombre illimité.
               </p>
             </div>
@@ -114,18 +114,18 @@ export default function SuppliersSection() {
       )}
 
       {/* Filtres */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
+                <Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="Rechercher par nom, ICE, email ou contact..."
               />
             </div>
@@ -135,7 +135,7 @@ export default function SuppliersSection() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="all">Tous les statuts</option>
               <option value="active">Actif</option>
@@ -151,9 +151,9 @@ export default function SuppliersSection() {
           const stats = getSupplierStats(supplier.id);
           
           return (
-            <div key={supplier.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-200">
+            <div key={supplier.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-200">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 truncate">{supplier.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">{supplier.name}</h3>
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => setViewingSupplier(supplier.id)}
@@ -180,19 +180,19 @@ export default function SuppliersSection() {
               </div>
 
               <div className="space-y-3 mb-4">
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                   <span className="font-medium">ICE:</span>
                   <span>{supplier.ice}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                   <Phone className="w-4 h-4" />
                   <span>{supplier.phone}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                   <Mail className="w-4 h-4" />
                   <span className="truncate">{supplier.email}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                   <span className="font-medium">Contact:</span>
                   <span className="truncate">{supplier.contactPerson}</span>
                 </div>
@@ -213,11 +213,11 @@ export default function SuppliersSection() {
                 <div className="text-center">
                   <p className={`text-lg font-bold ${
                     stats.balance > 0 ? 'text-red-600' : 
-                    stats.balance < 0 ? 'text-green-600' : 'text-gray-600'
+                    stats.balance < 0 ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'
                   }`}>
                     {stats.balance.toLocaleString()} MAD
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {stats.balance > 0 ? 'À payer' : stats.balance < 0 ? 'Crédit' : 'Soldé'}
                   </p>
                 </div>
@@ -233,7 +233,7 @@ export default function SuppliersSection() {
 
       {filteredSuppliers.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">Aucun fournisseur trouvé</p>
+          <p className="text-gray-500 dark:text-gray-400">Aucun fournisseur trouvé</p>
         </div>
       )}
 
