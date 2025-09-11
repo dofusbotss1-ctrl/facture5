@@ -3,17 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useLicense } from '../../contexts/LicenseContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Users, 
-  Package, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  FileText,
+  Users,
+  Package,
+  BarChart3,
   Settings,
   Building2,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,   // ✅ pour le dossier Gestion
+  ChevronDown, // ✅ pour le dossier Gestion
   FileCheck,
   TrendingUp,
   UserCheck,
@@ -33,16 +33,25 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
   const { licenseType } = useLicense();
   const { user } = useAuth();
 
-  // Pro actif ?
+  // ------- Abonnement PRO
   const isProActive =
-    user?.company.subscription === 'pro' &&
-    user?.company.expiryDate &&
+    user?.company?.subscription === 'pro' &&
+    user?.company?.expiryDate &&
     new Date(user.company.expiryDate) > new Date();
 
-  const canAccessProFeatures = user?.isAdmin ? isProActive : isProActive;
+  // ➕ PRO expiré (spécifique à ta demande)
+  const isProExpired =
+    user?.company?.subscription === 'pro' &&
+    user?.company?.expiryDate &&
+    new Date(user.company.expiryDate) <= new Date();
+
+  // Accès aux features PRO uniquement si actif
+  const canAccessProFeatures = isProActive;
+
+  // Activation en cours ?
   const isActivationPending = localStorage.getItem('proActivationPending') === 'true';
 
-  // Permissions
+  // ------- Permissions
   const hasPermission = (permission: string) => {
     if (user?.isAdmin) return true;
     if (!user?.permissions) return false;
@@ -56,39 +65,40 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
     }
   };
 
-  // --- Menus
+  // ------- Menus
   const primaryMenu = [
     { icon: LayoutDashboard, label: t('dashboard'), path: '/dashboard', permission: 'dashboard' },
-    { icon: FileText,        label: t('invoices'),  path: '/invoices',  permission: 'invoices' },
-    { icon: FileCheck,       label: 'Devis',        path: '/quotes',    permission: 'quotes' },
-    { icon: Users,           label: t('clients'),   path: '/clients',   permission: 'clients' },
-    { icon: Package,         label: t('products'),  path: '/products',  permission: 'products' },
-    { icon: Truck,           label: t('Fournisseurs'), path: '/suppliers', permission: 'suppliers' },
+    { icon: FileText, label: t('invoices'), path: '/invoices', permission: 'invoices' },
+    { icon: FileCheck, label: 'Devis', path: '/quotes', permission: 'quotes' },
+    { icon: Users, label: t('clients'), path: '/clients', permission: 'clients' },
+    { icon: Package, label: t('products'), path: '/products', permission: 'products' },
+    { icon: Truck, label: t('Fournisseurs'), path: '/suppliers', permission: 'suppliers' }
   ];
 
   const gestionMenu = [
-    { icon: FolderKanban, label: 'Gestion de Projet',  path: '/project-management', isPro: true, permission: 'projectManagement' },
-    { icon: Truck,        label: 'Gest. Fournisseurs', path: '/supplier-management', isPro: true, permission: 'supplierManagement' },
-    { icon: TrendingUp,   label: 'Gest. de Stock',     path: '/stock-management',    isPro: true, permission: 'stockManagement' },
-    { icon: BarChart3,    label: 'Gest. financière',   path: '/reports',             isPro: true, permission: 'reports' },
-    { icon: UserCheck,    label: 'Gest. Humaine',      path: '/hr-management',       isPro: true, permission: 'hrManagement' },
-    { icon: Shield,       label: 'Gest. de Compte',    path: '/account-management',  isPro: true, permission: 'settings' },
+    { icon: FolderKanban, label: 'Gestion de Projet', path: '/project-management', isPro: true, permission: 'projectManagement' },
+    { icon: Truck, label: 'Gest. Fournisseurs', path: '/supplier-management', isPro: true, permission: 'supplierManagement' },
+    { icon: TrendingUp, label: 'Gest. de Stock', path: '/stock-management', isPro: true, permission: 'stockManagement' },
+    { icon: BarChart3, label: 'Gest. financière', path: '/reports', isPro: true, permission: 'reports' },
+    { icon: UserCheck, label: 'Gest. Humaine', path: '/hr-management', isPro: true, permission: 'hrManagement' },
+    { icon: Shield, label: 'Gest. de Compte', path: '/account-management', isPro: true, permission: 'settings' }
   ];
 
-  const settingsMenu = [
-    { icon: Settings, label: t('settings'), path: '/settings', permission: 'settings' },
-  ];
+  const settingsMenu = [{ icon: Settings, label: t('settings'), path: '/settings', permission: 'settings' }];
 
-  const visiblePrimary = primaryMenu.filter(i => hasPermission(i.permission || ''));
-  const visibleGestion = gestionMenu.filter(i => hasPermission(i.permission || ''));
-  const visibleSettings = settingsMenu.filter(i => hasPermission(i.permission || ''));
+  const visiblePrimary = primaryMenu.filter((i) => hasPermission(i.permission || ''));
+  const visibleGestion = gestionMenu.filter((i) => hasPermission(i.permission || ''));
+  const visibleSettings = settingsMenu.filter((i) => hasPermission(i.permission || ''));
 
   const [isGestionOpen, setIsGestionOpen] = React.useState(false);
 
-  // Rendu d’un item
+  // ------- Rendu d’un item
   const renderItem = (
     item: {
-      icon: any; label: string; path: string; isPro?: boolean
+      icon: any;
+      label: string;
+      path: string;
+      isPro?: boolean;
     },
     depth: number = 0
   ) => {
@@ -107,9 +117,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           title={!open ? item.label : undefined}
           className={({ isActive }) =>
             `flex items-center ${open ? 'space-x-3' : 'justify-center'} ${basePadding} py-2.5 rounded-lg transition-all duration-200 group ${
-              isActive
-                ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-lg'
-                : 'text-gray-700 hover:bg-gray-100'
+              isActive ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'
             }`
           }
         >
@@ -126,6 +134,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
       );
     }
 
+    // Inaccessible (PRO mais non actif : essai Free OU PRO expiré)
     return (
       <button
         key={item.path}
@@ -137,6 +146,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
         {open && (
           <div className="flex items-center space-x-2">
             <span className="font-medium">{item.label}</span>
+            {/* 🔒 pour les items PRO non accessibles */}
             <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">🔒</span>
           </div>
         )}
@@ -198,20 +208,26 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                   )}
                 </div>
 
-                {/* Libellé + badge PRO en mode ouvert */}
+                {/* Libellé + badge en mode ouvert */}
                 {open && (
                   <>
                     <span className="font-semibold">Gestion</span>
-                    {/* ✅ Badge PRO orange si pro actif, sinon rouge */}
-                    <span
-                      className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border ${
-                        isProActive
-                          ? 'bg-orange-50 text-orange-700 border-orange-300'
-                          : 'bg-red-50 text-red-700 border-red-300'
-                      }`}
-                    >
-                      PRO
-                    </span>
+
+                    {/* ✅ Badge : PRO orange (actif) / 🔒 rouge (expiré) / PRO rouge (Free) */}
+                    {isProActive ? (
+                      <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-orange-50 text-orange-700 border-orange-300">
+                        PRO
+                      </span>
+                    ) : isProExpired ? (
+                      <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                        🔒
+                      </span>
+                    ) : (
+                      <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-red-50 text-red-700 border-red-300">
+                        PRO
+                      </span>
+                    )}
+
                     <span className="ml-auto text-xs text-gray-500">{visibleGestion.length}</span>
                     {isGestionOpen ? (
                       <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -268,10 +284,8 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
 
         {isProActive ? (
           <div className={`bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
-            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>
-              {open ? '👑 Pro' : '👑'}
-            </div>
-            {user?.company.expiryDate &&
+            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>{open ? '👑 Pro' : '👑'}</div>
+            {user?.company?.expiryDate &&
               (() => {
                 const currentDate = new Date();
                 const expiry = new Date(user.company.expiryDate);
@@ -298,9 +312,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
           </div>
         ) : isActivationPending ? (
           <div className={`bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
-            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>
-              {open ? '⏳ Activation en cours' : '⏳'}
-            </div>
+            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium ${open ? 'mb-1' : ''}`}>{open ? '⏳ Activation en cours' : '⏳'}</div>
             {open && <div className="text-xs opacity-90">Traitement sous 2h</div>}
           </div>
         ) : user?.isAdmin ? (
@@ -309,9 +321,7 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
             title={!open ? 'Acheter version Pro' : undefined}
             className={`w-full bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center transition-all duration-200 hover:shadow-lg`}
           >
-            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium`}>
-              {open ? '🆓 Free - Acheter version Pro' : '🆓'}
-            </div>
+            <div className={`${open ? 'text-xs' : 'text-[10px]'} font-medium`}>{open ? '🆓 Free - Acheter version Pro' : '🆓'}</div>
           </button>
         ) : (
           <div className={`bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg ${open ? 'p-3' : 'p-2'} text-white text-center`}>
