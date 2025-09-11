@@ -223,8 +223,8 @@ export default function Sidebar({ open, setOpen, onUpgrade }: SidebarProps) {
                         🔒
                       </span>
                     ) : (
-                      <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold border bg-red-50 text-red-700 border-red-300">
-                        PRO
+                      <span className="ml-2 inline-flex items-center text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                        🔒
                       </span>
                     )}
 
