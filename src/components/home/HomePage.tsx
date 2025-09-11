@@ -286,7 +286,7 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Gestion humaine (RH)</h3>
               <ul className="space-y-2 text-gray-700 text-sm">
                 <li className="flex items-start gap-2"><ClipboardList className="w-4 h-4 mt-0.5 text-teal-600" /> Fiches employés, rôles & permissions.</li>
-                <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 text-teal-600" /> Gestion des <strong>congés</strong> & <strong>heures supplémentaires</strong>.</li>
+                <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 text-teal-600" /> Gestion des congés & heures supplémentaires.</li>
               </ul>
             </motion.div>
 
