@@ -81,7 +81,7 @@ export default function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
     products.forEach(product => {
       if (
         product.name.toLowerCase().includes(term) ||
-        product.sku.toLowerCase().includes(term) ||
+        (product.sku || '').toLowerCase().includes(term) ||
         product.category.toLowerCase().includes(term)
       ) {
         results.push({
